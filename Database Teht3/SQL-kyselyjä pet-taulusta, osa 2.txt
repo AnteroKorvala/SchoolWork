@@ -1,0 +1,232 @@
+
+S:\UniServerZ>mysql -u root -p
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.18 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| employees          |
+| foobar             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| sakila             |
+| sys                |
+| test_db            |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql> select distinct owner from pet;
+ERROR 1046 (3D000): No database selected
+mysql> use test_db;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_test_db |
++-------------------+
+| pet               |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> describe pet;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| name    | varchar(20) | YES  |     | NULL    |       |
+| owner   | varchar(20) | YES  |     | NULL    |       |
+| species | varchar(20) | YES  |     | NULL    |       |
+| sex     | char(1)     | YES  |     | NULL    |       |
+| birth   | date        | YES  |     | NULL    |       |
+| death   | date        | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct owner from pet;
++--------+
+| owner  |
++--------+
+| Gwen   |
+| Harold |
+| Benny  |
+| Diane  |
++--------+
+4 rows in set (0.00 sec)
+
+mysql> select name from pet order by name;
++----------+
+| name     |
++----------+
+| Bowser   |
+| Buffy    |
+| Chirpy   |
+| Claws    |
+| Fang     |
+| Fluffy   |
+| Slim     |
+| Whistler |
++----------+
+8 rows in set (0.00 sec)
+
+mysql> select * from pet where death = null;
+Empty set (0.00 sec)
+
+mysql> select * from pet where death = 'null';
+ERROR 1525 (HY000): Incorrect DATE value: 'null'
+mysql> select * from pet where death = NULL;
+Empty set (0.00 sec)
+
+mysql> select * from pet where death = 'NULL';
+ERROR 1525 (HY000): Incorrect DATE value: 'NULL'
+mysql> select * from pet where death >= NULL;
+Empty set (0.00 sec)
+
+mysql> select * from pet where death <= NULL;
+Empty set (0.00 sec)
+
+mysql> select * from pet where death => NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=> NULL' at line 1
+mysql> select * from pet where death is not NULL;
++--------+-------+---------+------+------------+------------+
+| name   | owner | species | sex  | birth      | death      |
++--------+-------+---------+------+------------+------------+
+| Bowser | Diane | dog     | m    | 1998-08-31 | 1995-07-29 |
+| Chirpy | Gwen  | bird    | f    | 1998-09-11 | 2000-09-15 |
++--------+-------+---------+------+------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from pet where death is NULL;
++----------+--------+---------+------+------------+-------+
+| name     | owner  | species | sex  | birth      | death |
++----------+--------+---------+------+------------+-------+
+| Claws    | Gwen   | cat     | m    | 1994-03-17 | NULL  |
+| Buffy    | Harold | dog     | f    | 1989-05-13 | NULL  |
+| Fang     | Benny  | dog     | m    | 1990-08-27 | NULL  |
+| Whistler | Gwen   | bird    | NULL | 1997-12-09 | NULL  |
+| Slim     | Benny  | snake   | m    | 1996-04-29 | NULL  |
+| Fluffy   | Harold | cat     | f    | 1993-02-04 | NULL  |
++----------+--------+---------+------+------------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select distinct owner from pet where name = 'H';
+Empty set (0.00 sec)
+
+mysql> select distinct owner from pet where name >= 'H';
++-------+
+| owner |
++-------+
+| Gwen  |
+| Benny |
++-------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct owner from pet where name == 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '== 'H'' at line 1
+mysql> select distinct owner from pet where name <= 'H';
++--------+
+| owner  |
++--------+
+| Gwen   |
+| Harold |
+| Benny  |
+| Diane  |
++--------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct owner from pet where name = "H";
+Empty set (0.00 sec)
+
+mysql> select distinct owner from pet where name = 'H';
+Empty set (0.00 sec)
+
+mysql> select distinct owner from pet where name 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''H'' at line 1
+mysql> select distinct owner from pet where name is 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''H'' at line 1
+mysql> select distinct owner from pet where name starts 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'starts 'H'' at line 1
+mysql> select distinct owner from pet where name starts with 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'starts with 'H'' at line 1
+mysql> select owner from pet where name = 'H';
+Empty set (0.00 sec)
+
+mysql> select owner from pet where name >= 'H';
++-------+
+| owner |
++-------+
+| Gwen  |
+| Benny |
++-------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct owner from pet where name => 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=> 'H'' at line 1
+mysql> select distinct owner from pet where name is 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''H'' at line 1
+mysql> select distinct owner from pet where name is H;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'H' at line 1
+mysql> select distinct owner from pet where name is 'H';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''H'' at line 1
+mysql> select distinct owner from pet where owner = 'H%';
+Empty set (0.00 sec)
+
+mysql> select distinct owner from pet where owner is 'H%';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''H%'' at line 1
+mysql> select distinct owner from pet where owner like 'H%';
++--------+
+| owner  |
++--------+
+| Harold |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select distinct name from pet where name like '%ff';
+Empty set (0.00 sec)
+
+mysql> select * from pet;
++----------+--------+---------+------+------------+------------+
+| name     | owner  | species | sex  | birth      | death      |
++----------+--------+---------+------+------------+------------+
+| Claws    | Gwen   | cat     | m    | 1994-03-17 | NULL       |
+| Buffy    | Harold | dog     | f    | 1989-05-13 | NULL       |
+| Fang     | Benny  | dog     | m    | 1990-08-27 | NULL       |
+| Bowser   | Diane  | dog     | m    | 1998-08-31 | 1995-07-29 |
+| Chirpy   | Gwen   | bird    | f    | 1998-09-11 | 2000-09-15 |
+| Whistler | Gwen   | bird    | NULL | 1997-12-09 | NULL       |
+| Slim     | Benny  | snake   | m    | 1996-04-29 | NULL       |
+| Fluffy   | Harold | cat     | f    | 1993-02-04 | NULL       |
++----------+--------+---------+------+------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select distinct name from pet where name like '%ff%';
++--------+
+| name   |
++--------+
+| Buffy  |
+| Fluffy |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct name from pet where name like '____';
++------+
+| name |
++------+
+| Fang |
+| Slim |
++------+
+2 rows in set (0.00 sec)
+
+mysql>
