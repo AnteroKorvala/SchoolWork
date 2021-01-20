@@ -1,0 +1,319 @@
+mysql> create table owner
+    -> (
+    -> first_name varchar(255),
+    -> last_name varchar(255),
+    -> address varchar(255),
+    -> ownerID int PRIMARY KEY AUTO_INCREMENT);
+ERROR 1046 (3D000): No database selected
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| employees          |
+| foobar             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| sakila             |
+| sys                |
+| test_db            |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql> use test_db
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_test_db |
++-------------------+
+| pet               |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> create table owner
+    -> (
+    -> first_name varchar(255),
+    -> last_name varchar(255),
+    -> address varchar(255),
+    -> ownerID int PRIMARY KEY AUTO_INCREMENT);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc owner;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| first_name | varchar(255) | YES  |     | NULL    |                |
+| last_name  | varchar(255) | YES  |     | NULL    |                |
+| address    | varchar(255) | YES  |     | NULL    |                |
+| ownerID    | int(11)      | NO   | PRI | NULL    | auto_increment |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE pet DROP COLUM owner;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'owner' at line 1
+mysql> ALTER TABLE pet DROP COLUMN owner;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE pet ADD COLUMN petID INT PRIMARY KEY AUTO_INCREMENT;
+Query OK, 0 rows affected (0.15 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE pet ADD COLUMN ownerID INT;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE pet ADD CONSTRAINT FOREIGN KEY(ownerID) REFERENCES owner(ownerID);
+Query OK, 8 rows affected (0.08 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> desc pet;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| name    | varchar(20) | YES  |     | NULL    |                |
+| species | varchar(20) | YES  |     | NULL    |                |
+| sex     | char(1)     | YES  |     | NULL    |                |
+| birth   | date        | YES  |     | NULL    |                |
+| death   | date        | YES  |     | NULL    |                |
+| petID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| ownerID | int(11)     | YES  | MUL | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+mysql> desc owner;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| first_name | varchar(255) | YES  |     | NULL    |                |
+| last_name  | varchar(255) | YES  |     | NULL    |                |
+| address    | varchar(255) | YES  |     | NULL    |                |
+| ownerID    | int(11)      | NO   | PRI | NULL    | auto_increment |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> desc pet;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| name    | varchar(20) | YES  |     | NULL    |                |
+| species | varchar(20) | YES  |     | NULL    |                |
+| sex     | char(1)     | YES  |     | NULL    |                |
+| birth   | date        | YES  |     | NULL    |                |
+| death   | date        | YES  |     | NULL    |                |
+| petID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| ownerID | int(11)     | YES  | MUL | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO owner VALUES ( 'Harold','Lloyd','Someaddress 1',NULL);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO owner VALUES ( 'Gwen','Stefani','Someaddress 2',NULL);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO owner VALUES ( 'Benny','Hill','Someaddress 3',NULL);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO owner VALUES ( 'Diane','Keaton','Someaddress 4',NULL);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from owner;
++------------+-----------+---------------+---------+
+| first_name | last_name | address       | ownerID |
++------------+-----------+---------------+---------+
+| Harold     | Lloyd     | Someaddress 1 |       9 |
+| Gwen       | Stefani   | Someaddress 2 |      10 |
+| Benny      | Hill      | Someaddress 3 |      11 |
+| Diane      | Keaton    | Someaddress 4 |      12 |
++------------+-----------+---------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from pet;
++----------+---------+------+------------+------------+-------+---------+
+| name     | species | sex  | birth      | death      | petID | ownerID |
++----------+---------+------+------------+------------+-------+---------+
+| Claws    | cat     | m    | 1994-03-17 | NULL       |     1 |    NULL |
+| Buffy    | dog     | f    | 1989-05-13 | NULL       |     2 |    NULL |
+| Fang     | dog     | m    | 1990-08-27 | NULL       |     3 |    NULL |
+| Bowser   | dog     | m    | 1998-08-31 | 1995-07-29 |     4 |    NULL |
+| Chirpy   | bird    | f    | 1998-09-11 | 2000-09-15 |     5 |    NULL |
+| Whistler | bird    | NULL | 1997-12-09 | NULL       |     6 |    NULL |
+| Slim     | snake   | m    | 1996-04-29 | NULL       |     7 |    NULL |
+| Fluffy   | cat     | f    | 1993-02-04 | NULL       |     8 |    NULL |
++----------+---------+------+------------+------------+-------+---------+
+8 rows in set (0.00 sec)
+
+mysql> Up
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Up' at line 1
+mysql> UPDATE owner SET ownerID=NULL WHERE first_name='Harold';
+ERROR 1048 (23000): Column 'ownerID' cannot be null
+mysql> UPDATE owner SET ownerID=1 WHERE first_name='Harold';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE owner SET ownerID=2 WHERE first_name='Gwen';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE owner SET ownerID=3 WHERE first_name='Benny';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE owner SET ownerID=4 WHERE first_name='Diane';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from owner;
++------------+-----------+---------------+---------+
+| first_name | last_name | address       | ownerID |
++------------+-----------+---------------+---------+
+| Harold     | Lloyd     | Someaddress 1 |       1 |
+| Gwen       | Stefani   | Someaddress 2 |       2 |
+| Benny      | Hill      | Someaddress 3 |       3 |
+| Diane      | Keaton    | Someaddress 4 |       4 |
++------------+-----------+---------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE owner SET ownerID=3 WHERE first_name='Gwen';
+ERROR 1062 (23000): Duplicate entry '3' for key 'PRIMARY'
+mysql> UPDATE owner SET ownerID=5 WHERE first_name='Diane';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE owner SET ownerID=4 WHERE first_name='Benny';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE owner SET ownerID=3 WHERE first_name='Gwen';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from owner;
++------------+-----------+---------------+---------+
+| first_name | last_name | address       | ownerID |
++------------+-----------+---------------+---------+
+| Harold     | Lloyd     | Someaddress 1 |       1 |
+| Gwen       | Stefani   | Someaddress 2 |       3 |
+| Benny      | Hill      | Someaddress 3 |       4 |
+| Diane      | Keaton    | Someaddress 4 |       5 |
++------------+-----------+---------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE pet SET ownerID=3 WHERE name='Claws';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE pet SET ownerID=1 WHERE name='Buffy';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE pet SET ownerID=4 WHERE name='Fang';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE pet SET ownerID=5 WHERE name='Bowser';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE pet SET ownerID=3 WHERE name='Chirpy' OR name='Whistler';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> UPDATE pet SET ownerID=4 WHERE name='Slim';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from pet;
++----------+---------+------+------------+------------+-------+---------+
+| name     | species | sex  | birth      | death      | petID | ownerID |
++----------+---------+------+------------+------------+-------+---------+
+| Claws    | cat     | m    | 1994-03-17 | NULL       |     1 |       3 |
+| Buffy    | dog     | f    | 1989-05-13 | NULL       |     2 |       1 |
+| Fang     | dog     | m    | 1990-08-27 | NULL       |     3 |       4 |
+| Bowser   | dog     | m    | 1998-08-31 | 1995-07-29 |     4 |       5 |
+| Chirpy   | bird    | f    | 1998-09-11 | 2000-09-15 |     5 |       3 |
+| Whistler | bird    | NULL | 1997-12-09 | NULL       |     6 |       3 |
+| Slim     | snake   | m    | 1996-04-29 | NULL       |     7 |       4 |
+| Fluffy   | cat     | f    | 1993-02-04 | NULL       |     8 |    NULL |
++----------+---------+------+------------+------------+-------+---------+
+8 rows in set (0.00 sec)
+
+mysql> UPDATE pet SET ownerID=1 WHERE name='Fluffy';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from pet;
++----------+---------+------+------------+------------+-------+---------+
+| name     | species | sex  | birth      | death      | petID | ownerID |
++----------+---------+------+------------+------------+-------+---------+
+| Claws    | cat     | m    | 1994-03-17 | NULL       |     1 |       3 |
+| Buffy    | dog     | f    | 1989-05-13 | NULL       |     2 |       1 |
+| Fang     | dog     | m    | 1990-08-27 | NULL       |     3 |       4 |
+| Bowser   | dog     | m    | 1998-08-31 | 1995-07-29 |     4 |       5 |
+| Chirpy   | bird    | f    | 1998-09-11 | 2000-09-15 |     5 |       3 |
+| Whistler | bird    | NULL | 1997-12-09 | NULL       |     6 |       3 |
+| Slim     | snake   | m    | 1996-04-29 | NULL       |     7 |       4 |
+| Fluffy   | cat     | f    | 1993-02-04 | NULL       |     8 |       1 |
++----------+---------+------+------------+------------+-------+---------+
+8 rows in set (0.00 sec)
+
+mysql> select * from owner join pet on owner.ownerID = pet.ownerID;
++------------+-----------+---------------+---------+----------+---------+------+------------+------------+-------+---------+
+| first_name | last_name | address       | ownerID | name     | species | sex  | birth      | death      | petID | ownerID |
++------------+-----------+---------------+---------+----------+---------+------+------------+------------+-------+---------+
+| Harold     | Lloyd     | Someaddress 1 |       1 | Buffy    | dog     | f    | 1989-05-13 | NULL       |     2 |       1 |
+| Harold     | Lloyd     | Someaddress 1 |       1 | Fluffy   | cat     | f    | 1993-02-04 | NULL       |     8 |       1 |
+| Gwen       | Stefani   | Someaddress 2 |       3 | Claws    | cat     | m    | 1994-03-17 | NULL       |     1 |       3 |
+| Gwen       | Stefani   | Someaddress 2 |       3 | Chirpy   | bird    | f    | 1998-09-11 | 2000-09-15 |     5 |       3 |
+| Gwen       | Stefani   | Someaddress 2 |       3 | Whistler | bird    | NULL | 1997-12-09 | NULL       |     6 |       3 |
+| Benny      | Hill      | Someaddress 3 |       4 | Fang     | dog     | m    | 1990-08-27 | NULL       |     3 |       4 |
+| Benny      | Hill      | Someaddress 3 |       4 | Slim     | snake   | m    | 1996-04-29 | NULL       |     7 |       4 |
+| Diane      | Keaton    | Someaddress 4 |       5 | Bowser   | dog     | m    | 1998-08-31 | 1995-07-29 |     4 |       5 |
++------------+-----------+---------------+---------+----------+---------+------+------------+------------+-------+---------+
+8 rows in set (0.00 sec)
+
+mysql> select name,species from pet join owner on pet.ownerID = owner.ownerID where first_name='Harold';
++--------+---------+
+| name   | species |
++--------+---------+
+| Buffy  | dog     |
+| Fluffy | cat     |
++--------+---------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO owner VALUES ('Charlie','Chaplin',NULL,NULL);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO pet VALUES ('Puffball','dog','m','2014-09-04',NULL,NULL,NULL);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from owner;
++------------+-----------+---------------+---------+
+| first_name | last_name | address       | ownerID |
++------------+-----------+---------------+---------+
+| Harold     | Lloyd     | Someaddress 1 |       1 |
+| Gwen       | Stefani   | Someaddress 2 |       3 |
+| Benny      | Hill      | Someaddress 3 |       4 |
+| Diane      | Keaton    | Someaddress 4 |       5 |
+| Charlie    | Chaplin   | NULL          |      13 |
++------------+-----------+---------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> UPDATE owner SET ownerID=7 WHERE first_name='Charlie';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from owner;
++------------+-----------+---------------+---------+
+| first_name | last_name | address       | ownerID |
++------------+-----------+---------------+---------+
+| Harold     | Lloyd     | Someaddress 1 |       1 |
+| Gwen       | Stefani   | Someaddress 2 |       3 |
+| Benny      | Hill      | Someaddress 3 |       4 |
+| Diane      | Keaton    | Someaddress 4 |       5 |
+| Charlie    | Chaplin   | NULL          |       7 |
++------------+-----------+---------------+---------+
+5 rows in set (0.00 sec)
