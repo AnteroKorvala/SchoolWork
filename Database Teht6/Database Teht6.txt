@@ -1,0 +1,197 @@
+mysql> use employees;
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_employees  |
++----------------------+
+| current_dept_emp     |
+| departments          |
+| dept_emp             |
+| dept_emp_latest_date |
+| dept_manager         |
+| employees            |
+| salaries             |
+| titles               |
++----------------------+
+8 rows in set (0.01 sec)
+
+mysql> describe employees;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| emp_no     | int(11)       | NO   | PRI | NULL    |       |
+| birth_date | date          | NO   |     | NULL    |       |
+| first_name | varchar(14)   | NO   |     | NULL    |       |
+| last_name  | varchar(16)   | NO   |     | NULL    |       |
+| gender     | enum('M','F') | NO   |     | NULL    |       |
+| hire_date  | date          | NO   |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql> select * from employees order by last_name limit 10;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+|  11761 | 1964-07-17 | Bartek     | Aamodt    | M      | 1991-06-12 |
+|  15427 | 1959-03-06 | Aluzio     | Aamodt    | M      | 1985-03-03 |
+|  18182 | 1963-02-23 | Dekang     | Aamodt    | F      | 1988-05-25 |
+|  16572 | 1956-11-26 | Matt       | Aamodt    | M      | 1987-06-16 |
+|  12791 | 1960-06-16 | Mokhtar    | Aamodt    | M      | 1994-08-14 |
+|  12516 | 1958-06-25 | Sreenivas  | Aamodt    | F      | 1990-03-06 |
+|  12982 | 1952-12-08 | Sachem     | Aamodt    | F      | 1992-01-11 |
+|  17400 | 1962-03-22 | Basim      | Aamodt    | F      | 1991-09-15 |
+|  19898 | 1957-03-09 | Vidar      | Aamodt    | M      | 1988-08-06 |
+|  17885 | 1954-02-01 | Takanari   | Aamodt    | M      | 1996-08-19 |
++--------+------------+------------+-----------+--------+------------+
+10 rows in set (0.18 sec)
+
+mysql> select * from employees order by last_name, first_name limit 10;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+| 258641 | 1961-05-23 | Abdelkader | Aamodt    | M      | 1994-12-02 |
+| 258005 | 1953-02-17 | Adhemar    | Aamodt    | F      | 1991-01-21 |
+| 455773 | 1960-05-04 | Aemilian   | Aamodt    | M      | 1988-04-21 |
+| 436560 | 1959-03-16 | Alagu      | Aamodt    | F      | 1991-10-17 |
+| 266651 | 1959-05-28 | Aleksander | Aamodt    | F      | 1989-03-29 |
+| 487598 | 1962-03-03 | Alexius    | Aamodt    | M      | 1994-12-30 |
+| 216963 | 1960-07-16 | Alois      | Aamodt    | M      | 1995-08-24 |
+|  15427 | 1959-03-06 | Aluzio     | Aamodt    | M      | 1985-03-03 |
+| 100860 | 1964-06-20 | Amabile    | Aamodt    | F      | 1993-02-06 |
+| 107070 | 1954-04-24 | Anestis    | Aamodt    | M      | 1990-10-30 |
++--------+------------+------------+-----------+--------+------------+
+10 rows in set (0.19 sec)
+
+mysql> select * from employees order by hire_date desc limit 5;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+| 463807 | 1964-06-12 | Bikash     | Covnot    | M      | 2000-01-28 |
+| 428377 | 1957-05-09 | Yucai      | Gerlach   | M      | 2000-01-23 |
+| 499553 | 1954-05-06 | Hideyuki   | Delgrande | F      | 2000-01-22 |
+| 222965 | 1959-08-07 | Volkmar    | Perko     | F      | 2000-01-13 |
+|  47291 | 1960-09-09 | Ulf        | Flexer    | M      | 2000-01-12 |
++--------+------------+------------+-----------+--------+------------+
+5 rows in set (0.13 sec)
+
+mysql> select last_name,first_name,salary from employees JOIN salaries ON employees.emp_no = salaries.emp_no order by salary desc LIMIT 1;
++-----------+------------+--------+
+| last_name | first_name | salary |
++-----------+------------+--------+
+| Pesch     | Tokuyasu   | 158220 |
++-----------+------------+--------+
+1 row in set (1.42 sec)
+
+mysql> select last_name,first_name,salary from employees JOIN salaries ON employees.emp_no = salaries.emp_no order by salary LIMIT 1;
++-----------+------------+--------+
+| last_name | first_name | salary |
++-----------+------------+--------+
+| Baek      | Olivera    |  38623 |
++-----------+------------+--------+
+1 row in set (1.41 sec)
+
+mysql> select last_name,first_name,salary from employees JOIN salaries ON employees.emp_no = salaries.emp_no where salary>150000;
++-----------+------------+--------+
+| last_name | first_name | salary |
++-----------+------------+--------+
+| Pesch     | Tokuyasu   | 151115 |
+| Pesch     | Tokuyasu   | 153166 |
+| Pesch     | Tokuyasu   | 153458 |
+| Pesch     | Tokuyasu   | 157821 |
+| Pesch     | Tokuyasu   | 158220 |
+| Junet     | Ibibia     | 150345 |
+| Whitcomb  | Xiahua     | 151929 |
+| Whitcomb  | Xiahua     | 155709 |
+| Kambil    | Lansing    | 150052 |
+| Baca      | Willard    | 151768 |
+| Baca      | Willard    | 154459 |
+| Alameldin | Tsutomu    | 151484 |
+| Alameldin | Tsutomu    | 154885 |
+| Alameldin | Tsutomu    | 155377 |
+| Alameldin | Tsutomu    | 154888 |
+| Alameldin | Tsutomu    | 155190 |
+| Griswold  | Charmane   | 151596 |
+| Griswold  | Charmane   | 153715 |
+| Hatcliff  | Weicheng   | 150994 |
+| Hatcliff  | Weicheng   | 152687 |
+| Stanfel   | Mitsuyuki  | 152220 |
+| Luders    | Sanjai     | 150378 |
+| Luders    | Sanjai     | 154227 |
+| Luders    | Sanjai     | 155513 |
+| Mukaidono | Honesty    | 150754 |
+| Mukaidono | Honesty    | 152576 |
+| Mukaidono | Honesty    | 156286 |
+| Chenoweth | Weijing    | 151080 |
+| Chenoweth | Weijing    | 152710 |
+| Birdsall  | Shin       | 150467 |
+| Birdsall  | Shin       | 152412 |
+| Moehrke   | Mohammed   | 150740 |
+| Meriste   | Lidong     | 150993 |
+| Meriste   | Lidong     | 151565 |
+| Meriste   | Lidong     | 152208 |
+| Meriste   | Lidong     | 154376 |
++-----------+------------+--------+
+36 rows in set (1.53 sec)
+
+mysql> SELECT dept_name,COUNT(*) AS Lukumaara FROM departments JOIN dept_emp ON departments.dept_no=dept_emp.dept_no JOIN employees ON employees.emp_no=dept_emp.emp_no GROUP BY dept_name;
++--------------------+-----------+
+| dept_name          | Lukumaara |
++--------------------+-----------+
+| Customer Service   |     23580 |
+| Development        |     85707 |
+| Finance            |     17346 |
+| Human Resources    |     17786 |
+| Marketing          |     20211 |
+| Production         |     73485 |
+| Quality Management |     20117 |
+| Research           |     21126 |
+| Sales              |     52245 |
++--------------------+-----------+
+9 rows in set (0.52 sec)
+
+mysql> select first_name,last_name,dept_name from employees JOIN dept_manager ON employees.emp_no=dept_manager.emp_no JOIN departments ON dept_manager.dept_no=departments.dept_no;
++-------------+--------------+--------------------+
+| first_name  | last_name    | dept_name          |
++-------------+--------------+--------------------+
+| Tonny       | Butterworth  | Customer Service   |
+| Marjo       | Giarratana   | Customer Service   |
+| Xiaobin     | Spinelli     | Customer Service   |
+| Yuchang     | Weedman      | Customer Service   |
+| DeForest    | Hagimont     | Development        |
+| Leon        | DasSarma     | Development        |
+| Ebru        | Alpin        | Finance            |
+| Isamu       | Legleitner   | Finance            |
+| Shirish     | Ossenbruggen | Human Resources    |
+| Karsten     | Sigstam      | Human Resources    |
+| Margareta   | Markovitch   | Marketing          |
+| Vishwani    | Minakawa     | Marketing          |
+| Krassimir   | Wegerle      | Production         |
+| Rosine      | Cools        | Production         |
+| Shem        | Kieras       | Production         |
+| Oscar       | Ghazalie     | Production         |
+| Peternela   | Onuegbe      | Quality Management |
+| Rutger      | Hofmeyr      | Quality Management |
+| Sanjoy      | Quadeer      | Quality Management |
+| Dung        | Pesch        | Quality Management |
+| Arie        | Staelin      | Research           |
+| Hilary      | Kambil       | Research           |
+| Przemyslawa | Kaelbling    | Sales              |
+| Hauke       | Zhang        | Sales              |
++-------------+--------------+--------------------+
+24 rows in set (0.00 sec)
+
+mysql> select AVG(salary) FROM departments JOIN dept_emp ON departments.dept_no=dept_emp.dept_no JOIN salaries ON dept_emp.emp_no=salaries.emp_no WHERE dept_name='sales';
++-------------+
+| AVG(salary) |
++-------------+
+|  80667.6058 |
++-------------+
+1 row in set (0.40 sec)
+
+mysql> select AVG(salary) FROM departments JOIN dept_emp ON departments.dept_no=dept_emp.dept_no JOIN salaries ON dept_emp.emp_no=salaries.emp_no WHERE dept_name='marketing';
++-------------+
+| AVG(salary) |
++-------------+
+|  71913.2000 |
++-------------+
+1 row in set (0.33 sec)

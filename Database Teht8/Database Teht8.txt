@@ -1,0 +1,250 @@
+
+
+mysql> select * FROM actor WHERE first_name LIKE '%son%' OR last_name LIKE '%son%' ORDER BY first_name;
++----------+------------+-----------+---------------------+
+| actor_id | first_name | last_name | last_update         |
++----------+------------+-----------+---------------------+
+|      146 | ALBERT     | JOHANSSON | 2006-02-15 04:34:33 |
+|       65 | ANGELA     | HUDSON    | 2006-02-15 04:34:33 |
+|        6 | BETTE      | NICHOLSON | 2006-02-15 04:34:33 |
+|       61 | CHRISTIAN  | NEESON    | 2006-02-15 04:34:33 |
+|      115 | HARRISON   | BALE      | 2006-02-15 04:34:33 |
+|       62 | JAYNE      | NEESON    | 2006-02-15 04:34:33 |
+|        8 | MATTHEW    | JOHANSSON | 2006-02-15 04:34:33 |
+|      154 | MERYL      | GIBSON    | 2006-02-15 04:34:33 |
+|       64 | RAY        | JOHANSSON | 2006-02-15 04:34:33 |
+|      168 | WILL       | WILSON    | 2006-02-15 04:34:33 |
++----------+------------+-----------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> select COUNT(title) FROM film WHERE description LIKE '%Crocodile%' OR description LIKE '%Shark%';
++--------------+
+| COUNT(title) |
++--------------+
+|          203 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select DISTINCT first_name,last_name,release_year FROM actor JOIN film_actor ON actor.actor_id=film_actor.actor_id JOIN film ON film_actor.film_id=film.film_id WHERE description LIKE '%Crocodile%' OR description LIKE '%Shark%' ORDER BY last_name;
++-------------+--------------+--------------+
+| first_name  | last_name    | release_year |
++-------------+--------------+--------------+
+| DEBBIE      | AKROYD       |         2006 |
+| CHRISTIAN   | AKROYD       |         2006 |
+| KIRSTEN     | AKROYD       |         2006 |
+| MERYL       | ALLEN        |         2006 |
+| KIM         | ALLEN        |         2006 |
+| CUBA        | ALLEN        |         2006 |
+| ANGELINA    | ASTAIRE      |         2006 |
+| RUSSELL     | BACALL       |         2006 |
+| AUDREY      | BAILEY       |         2006 |
+| JESSICA     | BAILEY       |         2006 |
+| HARRISON    | BALE         |         2006 |
+| RENEE       | BALL         |         2006 |
+| JULIA       | BARRYMORE    |         2006 |
+| VIVIEN      | BASINGER     |         2006 |
+| SCARLETT    | BENING       |         2006 |
+| MICHAEL     | BENING       |         2006 |
+| VIVIEN      | BERGEN       |         2006 |
+| LIZA        | BERGMAN      |         2006 |
+| CHRISTOPHER | BERRY        |         2006 |
+| HENRY       | BERRY        |         2006 |
+| KARL        | BERRY        |         2006 |
+| CUBA        | BIRCH        |         2006 |
+| KEVIN       | BLOOM        |         2006 |
+| VAL         | BOLGER       |         2006 |
+| MICHAEL     | BOLGER       |         2006 |
+| CHRIS       | BRIDGES      |         2006 |
+| GOLDIE      | BRODY        |         2006 |
+| LAURA       | BRODY        |         2006 |
+| LAURENCE    | BULLOCK      |         2006 |
+| JOHNNY      | CAGE         |         2006 |
+| ZERO        | CAGE         |         2006 |
+| MATTHEW     | CARREY       |         2006 |
+| GREG        | CHAPLIN      |         2006 |
+| JON         | CHASE        |         2006 |
+| ED          | CHASE        |         2006 |
+| RUSSELL     | CLOSE        |         2006 |
+| FRED        | COSTNER      |         2006 |
+| RIP         | CRAWFORD     |         2006 |
+| DARYL       | CRAWFORD     |         2006 |
+| PENELOPE    | CRONYN       |         2006 |
+| ANNE        | CRONYN       |         2006 |
+| SIDNEY      | CROWE        |         2006 |
+| JUDE        | CRUISE       |         2006 |
+| RALPH       | CRUZ         |         2006 |
+| SCARLETT    | DAMON        |         2006 |
+| SUSAN       | DAVIS        |         2006 |
+| JENNIFER    | DAVIS        |         2006 |
+| FRANCES     | DAY-LEWIS    |         2006 |
+| RIVER       | DEAN         |         2006 |
+| JUDY        | DEAN         |         2006 |
+| EMILY       | DEE          |         2006 |
+| LUCILLE     | DEE          |         2006 |
+| JODIE       | DEGENERES    |         2006 |
+| NICK        | DEGENERES    |         2006 |
+| GINA        | DEGENERES    |         2006 |
+| JULIANNE    | DENCH        |         2006 |
+| CHARLIZE    | DENCH        |         2006 |
+| CHRIS       | DEPP         |         2006 |
+| SPENCER     | DEPP         |         2006 |
+| SYLVESTER   | DERN         |         2006 |
+| ALAN        | DREYFUSS     |         2006 |
+| ROCK        | DUKAKIS      |         2006 |
+| BURT        | DUKAKIS      |         2006 |
+| GROUCHO     | DUNST        |         2006 |
+| JULIA       | FAWCETT      |         2006 |
+| BOB         | FAWCETT      |         2006 |
+| CHRISTIAN   | GABLE        |         2006 |
+| KEVIN       | GARLAND      |         2006 |
+| HUMPHREY    | GARLAND      |         2006 |
+| AL          | GARLAND      |         2006 |
+| MERYL       | GIBSON       |         2006 |
+| PARKER      | GOLDBERG     |         2006 |
+| EWAN        | GOODING      |         2006 |
+| GREGORY     | GOODING      |         2006 |
+| ADAM        | GRANT        |         2006 |
+| ED          | GUINESS      |         2006 |
+| PENELOPE    | GUINESS      |         2006 |
+| SEAN        | GUINESS      |         2006 |
+| WILLIAM     | HACKMAN      |         2006 |
+| TIM         | HACKMAN      |         2006 |
+| CATE        | HARRIS       |         2006 |
+| DAN         | HARRIS       |         2006 |
+| BEN         | HARRIS       |         2006 |
+| MEG         | HAWKE        |         2006 |
+| GEOFFREY    | HESTON       |         2006 |
+| WOODY       | HOFFMAN      |         2006 |
+| MAE         | HOFFMAN      |         2006 |
+| KENNETH     | HOFFMAN      |         2006 |
+| HARVEY      | HOPE         |         2006 |
+| GENE        | HOPKINS      |         2006 |
+| NATALIE     | HOPKINS      |         2006 |
+| MORGAN      | HOPKINS      |         2006 |
+| MENA        | HOPPER       |         2006 |
+| ADAM        | HOPPER       |         2006 |
+| ANGELA      | HUDSON       |         2006 |
+| CARMEN      | HUNT         |         2006 |
+| WHOOPI      | HURT         |         2006 |
+| WARREN      | JACKMAN      |         2006 |
+| JANE        | JACKMAN      |         2006 |
+| ALBERT      | JOHANSSON    |         2006 |
+| MATTHEW     | JOHANSSON    |         2006 |
+| RAY         | JOHANSSON    |         2006 |
+| WOODY       | JOLIE        |         2006 |
+| KIRK        | JOVOVICH     |         2006 |
+| GRETA       | KEITEL       |         2006 |
+| MARY        | KEITEL       |         2006 |
+| MILLA       | KEITEL       |         2006 |
+| OPRAH       | KILMER       |         2006 |
+| FAY         | KILMER       |         2006 |
+| MINNIE      | KILMER       |         2006 |
+| REESE       | KILMER       |         2006 |
+| SANDRA      | KILMER       |         2006 |
+| MATTHEW     | LEIGH        |         2006 |
+| JOHNNY      | LOLLOBRIGIDA |         2006 |
+| GRETA       | MALDEN       |         2006 |
+| ED          | MANSFIELD    |         2006 |
+| ELVIS       | MARX         |         2006 |
+| CARY        | MCCONAUGHEY  |         2006 |
+| MICHELLE    | MCCONAUGHEY  |         2006 |
+| MORGAN      | MCDORMAND    |         2006 |
+| GENE        | MCKELLEN     |         2006 |
+| TOM         | MCKELLEN     |         2006 |
+| JULIA       | MCQUEEN      |         2006 |
+| CATE        | MCQUEEN      |         2006 |
+| TOM         | MIRANDA      |         2006 |
+| LISA        | MONROE       |         2006 |
+| PENELOPE    | MONROE       |         2006 |
+| GRACE       | MOSTEL       |         2006 |
+| JIM         | MOSTEL       |         2006 |
+| JAYNE       | NEESON       |         2006 |
+| CHRISTIAN   | NEESON       |         2006 |
+| BETTE       | NICHOLSON    |         2006 |
+| SALMA       | NOLTE        |         2006 |
+| JAYNE       | NOLTE        |         2006 |
+| WARREN      | NOLTE        |         2006 |
+| ALBERT      | NOLTE        |         2006 |
+| AUDREY      | OLIVIER      |         2006 |
+| CUBA        | OLIVIER      |         2006 |
+| KIRSTEN     | PALTROW      |         2006 |
+| KENNETH     | PALTROW      |         2006 |
+| SANDRA      | PECK         |         2006 |
+| SPENCER     | PECK         |         2006 |
+| MILLA       | PECK         |         2006 |
+| RICHARD     | PENN         |         2006 |
+| GARY        | PENN         |         2006 |
+| KENNETH     | PESCI        |         2006 |
+| OLYMPIA     | PFEIFFER     |         2006 |
+| GARY        | PHOENIX      |         2006 |
+| PENELOPE    | PINKETT      |         2006 |
+| JAMES       | PITT         |         2006 |
+| BURT        | POSEY        |         2006 |
+| ELLEN       | PRESLEY      |         2006 |
+| RITA        | REYNOLDS     |         2006 |
+| JADA        | RYDER        |         2006 |
+| JEFF        | SILVERSTONE  |         2006 |
+| JAYNE       | SILVERSTONE  |         2006 |
+| GROUCHO     | SINATRA      |         2006 |
+| SISSY       | SOBIESKI     |         2006 |
+| NICK        | STALLONE     |         2006 |
+| CAMERON     | STREEP       |         2006 |
+| DAN         | STREEP       |         2006 |
+| JOHN        | SUVARI       |         2006 |
+| JOE         | SWANK        |         2006 |
+| IAN         | TANDY        |         2006 |
+| MARY        | TANDY        |         2006 |
+| DUSTIN      | TAUTOU       |         2006 |
+| RUSSELL     | TEMPLE       |         2006 |
+| MENA        | TEMPLE       |         2006 |
+| BURT        | TEMPLE       |         2006 |
+| THORA       | TEMPLE       |         2006 |
+| FRANCES     | TOMEI        |         2006 |
+| KENNETH     | TORN         |         2006 |
+| WALTER      | TORN         |         2006 |
+| DAN         | TORN         |         2006 |
+| LUCILLE     | TRACY        |         2006 |
+| RENEE       | TRACY        |         2006 |
+| HELEN       | VOIGHT       |         2006 |
+| DARYL       | WAHLBERG     |         2006 |
+| NICK        | WAHLBERG     |         2006 |
+| BELA        | WALKEN       |         2006 |
+| ALEC        | WAYNE        |         2006 |
+| REESE       | WEST         |         2006 |
+| CHRISTOPHER | WEST         |         2006 |
+| MORGAN      | WILLIAMS     |         2006 |
+| SEAN        | WILLIAMS     |         2006 |
+| GROUCHO     | WILLIAMS     |         2006 |
+| GENE        | WILLIS       |         2006 |
+| BEN         | WILLIS       |         2006 |
+| HUMPHREY    | WILLIS       |         2006 |
+| WILL        | WILSON       |         2006 |
+| FAY         | WINSLET      |         2006 |
+| RIP         | WINSLET      |         2006 |
+| ANGELA      | WITHERSPOON  |         2006 |
+| FAY         | WOOD         |         2006 |
+| UMA         | WOOD         |         2006 |
+| CAMERON     | WRAY         |         2006 |
+| MINNIE      | ZELLWEGER    |         2006 |
+| JULIA       | ZELLWEGER    |         2006 |
+| CAMERON     | ZELLWEGER    |         2006 |
++-------------+--------------+--------------+
+199 rows in set (0.00 sec)
+
+mysql> select name,COUNT(*) AS 'lkm' FROM film_category JOIN category ON film_category.category_id=category.category_id GROUP BY name HAVING lkm <= 65 AND lkm >= 55 ORDER BY lkm;
++----------+-----+
+| name     | lkm |
++----------+-----+
+| Horror   |  56 |
+| Classics |  57 |
+| Travel   |  57 |
+| Comedy   |  58 |
+| Children |  60 |
+| Games    |  61 |
+| Sci-Fi   |  61 |
+| Drama    |  62 |
+| New      |  63 |
+| Action   |  64 |
++----------+-----+
+10 rows in set (0.00 sec)
+
