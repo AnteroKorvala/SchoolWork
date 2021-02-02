@@ -1,0 +1,50 @@
+mysql> SELECT * FROM opiskelija JOIN arviointi ON opiskelija.idopiskelija = arviointi.idopiskelija WHERE arvosana < 1;
++--------------+----------+----------+--------------+--------------+-------------+------------+----------+--------------+---------------+
+| idOpiskelija | Etunimi  | Sukunimi | Osoite       | Luokkatunnus | idArviointi | Päiväys    | Arvosana | idOpiskelija | idOpintojakso |
++--------------+----------+----------+--------------+--------------+-------------+------------+----------+--------------+---------------+
+|            6 | Pösilö   | Haha     | Siellatiella | TVT20SPL     |          22 | 2021-01-31 |        0 |            6 |             1 |
++--------------+----------+----------+--------------+--------------+-------------+------------+----------+--------------+---------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM opiskelija JOIN arviointi ON opiskelija.idopiskelija = arviointi.idopiskelija JOIN opintojakso ON arviointi.idopintojakso = opintojakso.idopintojakso WHERE Arvosana > 0 AND Nimi = 'Engineering English';
++--------------+---------+----------+-----------------+--------------+-------------+------------+----------+--------------+---------------+---------------+---------------------+---------+---------+
+| idOpiskelija | Etunimi | Sukunimi | Osoite          | Luokkatunnus | idArviointi | Päiväys    | Arvosana | idOpiskelija | idOpintojakso | idOpintojakso | Nimi                | Laajuus | Koodi   |
++--------------+---------+----------+-----------------+--------------+-------------+------------+----------+--------------+---------------+---------------+---------------------+---------+---------+
+|            1 | Aku     | Ankka    | Paratiisitie 13 | TVT20SPL     |          12 | 2021-01-31 |        1 |            1 |             3 |             3 | Engineering English |       5 | XYZ0002 |
+|            2 | Roope   | Ankka    | Rahasäiliö      | TVT20SPL     |          13 | 2021-01-31 |        5 |            2 |             3 |             3 | Engineering English |       5 | XYZ0002 |
+|            3 | Iines   | Ankka    | Iineksentie 1   | TVT20SPL     |          14 | 2021-01-31 |        3 |            3 |             3 |             3 | Engineering English |       5 | XYZ0002 |
+|            4 | Mikki   | Hiiri    | Mikintie 1      | TVT20SPL     |          15 | 2021-01-31 |        5 |            4 |             3 |             3 | Engineering English |       5 | XYZ0002 |
+|            5 | Hessu   | Hopo     | Hessuntie 1     | TVT20SPL     |          16 | 2021-01-31 |        1 |            5 |             3 |             3 | Engineering English |       5 | XYZ0002 |
++--------------+---------+----------+-----------------+--------------+-------------+------------+----------+--------------+---------------+---------------+---------------------+---------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT Nimi FROM opintojakso JOIN arviointi ON opintojakso.idopintojakso = arviointi.idopintojakso JOIN opiskelija ON arviointi.idopiskelija = opiskelija.idopiskelija WHERE arvosana >= 0 AND Etunimi = 'Hessu';
++-----------------------------------------------+
+| Nimi                                          |
++-----------------------------------------------+
+| Tietokannat ja internet ohjelmointi           |
+| Olio-ohjelmointi ja oliopohjainen suunnittelu |
+| Engineering English                           |
+| Soveltava fysiikka ja matematiikka            |
++-----------------------------------------------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT AVG(Arvosana) FROM arviointi JOIN opiskelija ON arviointi.idopiskelija = opiskelija.idopiskelija WHERE Etunimi = 'Aku' AND Sukunimi = 'Ankka';
++---------------+
+| AVG(Arvosana) |
++---------------+
+|        1.0000 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT Nimi
+    -> FROM opintojakso
+    -> LEFT JOIN arviointi
+    -> ON opintojakso.idopintojakso = arviointi.idopintojakso
+    -> WHERE arvosana IS NULL;
++-----------------------+
+| Nimi                  |
++-----------------------+
+| Se mita kukaan ei kay |
++-----------------------+
+1 row in set (0.00 sec)
