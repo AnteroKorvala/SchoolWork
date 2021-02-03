@@ -1,0 +1,28 @@
+mysql> SELECT * FROM kirja;
++---------+----------+--------+
+| idKirja | Luokitus | idTeos |
++---------+----------+--------+
+|       1 | Memories |      1 |
+|       2 | Memories |      1 |
++---------+----------+--------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Nimi,Etunimi,Sukunimi FROM teos
+    -> JOIN teos_has_tekija ON teos.idTeos = teos_has_tekija.idTeos
+    -> JOIN tekija ON teos_has_tekija.idTekija = tekija.idTekija
+    -> ;
++--------------+---------+----------+
+| Nimi         | Etunimi | Sukunimi |
++--------------+---------+----------+
+| How to Linux | Antero  | Korvala  |
+| How to Linux | Linus   | Torvalds |
++--------------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM lainaus;
++-----------+------------+-------------+---------+-----------+------------+
+| idLainaus | LainausPVM | PalautusPVM | idKirja | idAsiakas | Palautettu |
++-----------+------------+-------------+---------+-----------+------------+
+|         1 | 1991-09-17 | 1991-10-17  |       1 |         1 |          0 |
++-----------+------------+-------------+---------+-----------+------------+
+1 row in set (0.00 sec)
