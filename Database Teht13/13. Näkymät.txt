@@ -1,0 +1,48 @@
+mysql> SELECT * FROM teos ORDER BY nimi;
++--------+--------------+-------------------+
+| idTeos | Nimi         | ISBN              |
++--------+--------------+-------------------+
+|      1 | How to Linux | 978-0-000000-00-2 |
++--------+--------------+-------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM tekija ORDER BY Etunimi;
++----------+---------+----------+
+| idTekija | Etunimi | Sukunimi |
++----------+---------+----------+
+|        1 | Antero  | Korvala  |
+|        2 | Linus   | Torvalds |
++----------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Nimi, Etunimi, Sukunimi FROM teos JOIN kirja ON teos.idTeos = kirja.idTeos JOIN lainaus ON kirja.idkirja = lainaus.idkirja JOIN asiakas ON lainaus.idasiakas = asiakas.idasiakas;
++--------------+---------+-----------+
+| Nimi         | Etunimi | Sukunimi  |
++--------------+---------+-----------+
+| How to Linux | Ken     | Thompson  |
+| How to Linux | Brian   | Kernighan |
+| How to Linux | Dennis  | Ritchie   |
+| How to Linux | Douglas | Mcllroy   |
+| How to Linux | Joe     | Ossanna   |
++--------------+---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT Nimi FROM teos JOIN kirja ON teos.idteos = kirja.idteos JOIN lainaus ON kirja.idkirja = lainaus.idkirja WHERE palautettu = 0;
++--------------+
+| Nimi         |
++--------------+
+| How to Linux |
+| How to Linux |
+| How to Linux |
+| How to Linux |
+| How to Linux |
++--------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(idTeos) FROM kirja;
++---------------+
+| COUNT(idTeos) |
++---------------+
+|             2 |
++---------------+
+1 row in set (0.00 sec)

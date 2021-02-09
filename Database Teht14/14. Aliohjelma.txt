@@ -1,0 +1,162 @@
+14 A)
+CREATE PROCEDURE `LisaaTeos` (
+IN En VARCHAR(45),
+IN Sn VARCHAR(45),
+IN Knimi VARCHAR(45),
+IN isbn VARCHAR(45))
+
+BEGIN
+DECLARE BookID INT  DEFAULT 0;
+DECLARE AuthorID INT DEFAULT 0;
+DECLARE TTID INT DEFAULT 0;
+SELECT idTeos INTO BookID FROM Teos WHERE Nimi = Knimi;
+
+IF BookID = 0 THEN
+	INSERT INTO Teos VALUES(NULL, Knimi, isbn);
+    SELECT LAST_INSERT_ID() INTO BookID;
+END IF;
+
+IF En IS NOT NULL AND Sn IS NOT NULL THEN
+	SELECT idTekija INTO AuthorID FROM Tekija WHERE Etunimi = En AND Sukunimi = Sn;
+    IF AuthorID = 0 THEN
+		INSERT INTO Tekija VALUES(NULL, En, Sn);
+        SELECT last_insert_id() INTO AuthorID;
+	END IF;
+END IF;
+
+SELECT COUNT(*) INTO TTID FROM Tekija_has_Teos WHERE idTekija = AuthorID AND idTeos = BookID;
+IF TTID = 0 THEN
+	INSERT INTO Tekija_has_Teos VALUES(AuthorID, BookID);
+END IF;
+
+END
+
+14 B)
+CREATE PROCEDURE `Uusi_Lainaus` (
+IN En VARCHAR(45),
+IN Sn VARCHAR(45),
+IN Knimi VARCHAR(45)
+)
+Aliohjelma:BEGIN
+DECLARE N INT DEFAULT 0;
+DECLARE M INT DEFAULT 0;
+DECLARE CustID INT DEFAULT 0;
+DECLARE BookID INT DEFAULT 0;
+
+SELECT idAsiakas INTO CustID FROM Asiakas WHERE Sukunimi = Sn AND Etunimi = En;
+
+IF CustID = 0 THEN
+	SELECT 'Lainaajaa ei löydy';
+    LEAVE Aliohjelma;
+END IF;
+
+SELECT idTeos INTO BookID FROM Teos WHERE Knimi = Nimi;
+
+IF BookID = 0 THEN
+	SELECT 'Kirjaa ei löydy';
+    LEAVE Aliohjelma;
+END IF;
+
+SELECT k.idKirja INTO N FROM Teos t JOIN Kirja k ON t.idTeos = k.idTeos
+LEFT JOIN Lainaus l ON l.idKirja = k.idKirja
+WHERE t.idTeos = BookID AND (Palautettu=1 OR Palautettu IS NULL) LIMIT 1;
+
+IF N = 0 THEN
+	SELECT 'Kaikki kirjat lainassa';
+    LEAVE Aliohjelma;
+END IF;
+
+INSERT INTO Lainaus VALUES(NULL, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), CustID, N, FALSE);
+
+END
+
+14 C)
+CREATE PROCEDURE `Myöhässä` ()
+BEGIN
+SELECT Nimi, Etunimi, Sukunimi FROM Teos 
+JOIN Kirja ON Teos.idTeos = Kirja.idTeos 
+JOIN Lainaus ON kirja.idKirja = lainaus.idKirja 
+JOIN Asiakas ON lainaus.idAsiakas = Asiakas.idAsiakas
+WHERE Palautus = 0;
+END
+
+14 D)
+CREATE PROCEDURE `ADD_CREDIT` (
+IN En VARCHAR(45),
+IN Sn VARCHAR(45),
+IN KK VARCHAR(45),
+IN Arvos INT
+)
+
+Aliohjelma:BEGIN
+DECLARE OpiskID INT DEFAULT 0;
+DECLARE ArvID INT DEFAULT 0;
+DECLARE OpintojaID INT DEFAULT 0;
+
+SELECT idOpiskelija INTO OpiskID FROM Opiskelija WHERE Etunimi = En AND Sukunimi = Sn;
+
+IF OpiskID = 0 THEN
+	SELECT 'Opiskelijaa ei ole';
+    LEAVE Aliohjelma;
+END IF;
+    
+SELECT idOpintojakso INTO OpintojaID FROM Opintojakso WHERE Koodi = KK;
+
+IF OpintojaID = 0 THEN
+	SELECT 'Opintojaksoa ei ole';
+    LEAVE Aliohjelma;
+END IF;
+
+SELECT Arvosana INTO ArvID FROM Arviointi
+LEFT JOIN Opiskelija ON Arviointi.idOpiskelija = Opiskelija.idOpiskelija
+RIGHT JOIN opintojakso ON Arviointi.idOpintojakso = Opintojakso.idOpintojakso
+WHERE Arvosana = Arvos AND Arvos >= 0 AND Arvos <= 5 LIMIT 1;
+
+IF (Arvos < 0 OR Arvos > 5) THEN
+	SELECT 'Unvalidi arvosana';
+    LEAVE Aliohjelma;
+END IF;
+
+INSERT INTO Arviointi VALUES(NULL,CURDATE(), ArvID, OpiskID, OpintojaID); 
+
+END
+
+14 E)
+CREATE PROCEDURE `DELETE_CREDIT` (
+IN En VARCHAR(45),
+IN Sn VARCHAR(45),
+IN Kk VARCHAR(45)
+)
+Aliohjelma:BEGIN
+DECLARE idOpis INT DEFAULT 0;
+DECLARE idArv INT DEFAULT 0;
+DECLARE idOpin INT DEFAULT 0;
+
+SELECT idOpiskelija INTO idOpis FROM Opiskelija WHERE Etunimi = En AND Sukunimi = Sn;
+
+IF idOpis = 0 THEN
+	SELECT 'Opiskelijaa ei ole';
+    LEAVE Aliohjelma;
+END IF;
+
+SELECT idOpintojakso INTO idOpin FROM Opintojakso WHERE Koodi = Kk;
+
+IF idOpin = 0 THEN
+	SELECT 'Opintojaksoa ei ole';
+    LEAVE Aliohjelma;
+END IF;
+
+SELECT idArviointi INTO idArv FROM Arviointi
+LEFT JOIN Opiskelija ON Arviointi.idOpiskelija = Opiskelija.idOpiskelija
+RIGHT JOIN Opintojakso ON Arviointi.idOpintojakso = Opintojakso.idOpintojakso
+WHERE (Etunimi = En AND Sukunimi = Sn AND Koodi = Kk) LIMIT 1;
+
+IF idArv = 0 THEN
+	SELECT 'Ei arviointia';
+    LEAVE Aliohjelma;
+END IF;
+
+DELETE FROM Arviointi WHERE idOpiskelija = idOpis AND idOpintojakso = idOpin AND idArviointi = idArv;
+    
+
+END
